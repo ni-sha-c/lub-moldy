@@ -1,9 +1,16 @@
 clear all
 close all
 %lattice constant
-a0= 2.8889e0;
-%Number of lattices
-N = 45;
+a0= 2.855324e0;
+%Number of lattices in x and y direction
+N = 10;
+%System height in lattice units
+H = 15;
+%No of hexadecane molecules
+nhd = 25;
+%No of hexadecane atoms
+nahd = 1250;
+
 %Bottom Half
 %Base Lattice
 %Layer 1
@@ -75,11 +82,11 @@ z_base = [z1, z2, zn];
 %Number of atoms in the base
 noab = length(x_base);
 
-%raising to a base height
-%System height accommodates 45 lattice units.
-%Upto 15 in one half, leaving 15 units empty for lubricant.
+%raising the base to a certain height
+%Total system is a cuboid of height H lattice units. 
+%The leaving some units empty for lubricant.
 
-bh = 15;
+bh = 5;
 xh = repmat(x_base, 1, bh); 
 yh = repmat(y_base, 1, bh);
 zh = repmat(z_base, 1, bh);
@@ -94,7 +101,7 @@ zh = zh + scal;
 %in the hope of avoiding needles. - version 2
 rarr = rand(1,N^2);
 
-rh1 = floor((N-2*bh)/2*rarr);
+rh1 = floor((H-2*bh)/2*rarr);
 
 %Top layer before increasing height randomly
 z_base = z_base + (bh-1)*a0;
@@ -123,10 +130,11 @@ end
 tn = 2*length(xh);
 
 %Printing in LAMMPS format for "full" atoms
-attype = repmat([ones(1,3*noab), 2*ones(1, 4*noab), ...
-    3*ones(1, length(xh) - 7*noab)],1,2);
-A = [1:tn; 1:tn; attype; ... 
-zeros(1, tn); xh, xh; yh, yh; zh, N*a0 - zh];
+%Rigid wall is one layer. Thermostat layers 2. 
+attype = repmat([ones(1,noab), 2*ones(1, 2*noab), ...
+    3*ones(1, length(xh) - 3*noab)],1,2);
+A = [(nahd + 1):(tn + nahd); (nhd + 1):(tn + 25) ; attype; ... 
+zeros(1, tn); xh, xh; yh, yh; zh, H*a0 - zh];
 fid = fopen('solid_walls.data', 'w');
 fprintf(fid, '%d %d %d %f %15.8f %15.8f %15.8f\n', A);
 fclose(fid);
