@@ -1,0 +1,24 @@
+import "solid_walls.lt"
+import "hexadecane.lt"
+
+write_once("Data Boundary") {
+	0.0 29.0 xlo xhi
+	0.0 29.0 ylo yhi
+	0.0 43.4 zlo zhi 
+}
+
+#Based on hand calculations.
+# Must change on increasing size of the box.(can be done 
+# by increasing N in 
+# coord.m)
+
+
+lubricant = new Hexadecane [5].move(0.0, 0.0, 2.0)
+					       [5].move(0.0, 4.0, 0.0)
+						 
+
+lubricant[*][*].move(0.0, 0.0, 14.28)
+
+walls = new solid_walls [10].move(0.0, 10.0, 0.0)						   
+
+ 
