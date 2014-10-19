@@ -1,0 +1,41 @@
+
+
+# ----------------- Init Section -----------------
+
+include "system.in.init"
+
+
+# ----------------- Atom Definition Section -----------------
+
+read_data "system.data"
+
+# ----------------- Settings Section -----------------
+
+include "system.in.settings"
+
+
+# ----------------- Run Section -----------------
+group toplayer type 1 
+group bottomlayer type 2 
+group deformable type 5 6
+group thermostat type 3 4 
+group lowerrigid type 4 6 
+group upperrigid type 1 3
+group hexadecane type 7 8 
+#  -- minimize --
+minimize 1.0e-5 1.0e-7 10000 100000
+timestep 2
+fix   fxnvt thermostat nvt temp 300.0 300.0 100.0
+fix fxbl lowerrigid setforce 0.0 0.0 0.0
+fix applypressure upperrigid aveforce 0.0 0.0 0.549 
+dump dumpaha all custom 500 app_pressure.lammpstrj id mol type x y z ix iy iz
+#  -- Now, finally run the simulation --
+#compute 1 toplayer msd
+#variable b equal c_1[4]
+#fix movement toplayer print 500 "The top layer has moved by $b" file tl_move.dat
+compute 2 toplayer group/group upperrigid  
+variable e equal c_2[3]
+fix check deformable print 500 "Force between deformable atoms = $e" 
+run   5000
+#  ---- (end of examples) ----
+

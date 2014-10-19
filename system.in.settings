@@ -1,0 +1,22 @@
+  pair_coeff * * eam/fs Fe_mm.eam.fs Fe Fe Fe Fe Fe Fe NULL NULL
+	pair_coeff 5 6 lj/cut 0.4717 3.21 
+	pair_coeff 5 7* lj/cut 0.3025 3.48    
+	pair_coeff 6 7* lj/cut 0.3025 3.48
+    
+    pair_coeff 7 7 lj/charmm/coul/long 0.1094 1.9080
+    pair_coeff 8 8 lj/charmm/coul/long 0.0157 1.3870
+
+	pair_coeff 1*4 7* none
+
+    #           bond-type              k     r0
+    bond_coeff  1  harmonic   303.1 1.5350
+    bond_coeff  2  harmonic   335.9 1.0930
+
+    #            angle-type             k    theta0
+    angle_coeff  1  harmonic 63.210 110.630
+    angle_coeff  2  harmonic 46.360 110.070
+    angle_coeff  3  harmonic 39.180 109.550
+
+    #                  dihedral-type
+    dihedral_coeff 1 fourier 1 0.155555555556 3 0.0
+    dihedral_coeff 2 fourier 3 0.18 3 0.0 0.25 2 180.0 0.2 1 180.0
